@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('inventarios', function (Blueprint $table) {
             $table->id();
+            $table->foreignID('user_id')->constrained()->onDelete('cascade');
+            $table->string('store_name');
+            $table->text('bio')->nullable();
+            $table->string('contact_phone')->nullable();
+            $table->string('social_link')->nullable();
             $table->timestamps();
         });
     }
