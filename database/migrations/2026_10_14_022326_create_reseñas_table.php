@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('reseñas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('seller_id')->nullable()->constrained('users')->onDelete('cascade'); // Reseña al vendedor
-            $table->foreignId('product_id')->nullable()->constrained('products')->onDelete('cascade'); // Reseña al producto
+            $table->foreignId('product_id')->nullable()->constrained('productos')->onDelete('cascade'); // Reseña al producto
             $table->unsignedTinyInteger('rating'); // 1 a 5 estrellas
             $table->text('comment')->nullable();
             $table->timestamps();
