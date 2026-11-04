@@ -18,7 +18,11 @@ class InventarioFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => User::factory()->state(['role' => 'seller']),
+            'store_name' => 'Tienda de' . fake()->firstName(),
+            'bio' => fake()->sentence(),
+            'contact_phone' => fake()->phoneNumber(),
+            'social_link' => 'https://instagram.com/' . fake()->userName(),
         ];
     }
 }

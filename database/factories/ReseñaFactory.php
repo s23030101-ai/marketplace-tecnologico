@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Models\Reseña;
+use App\Models\User;
+use App\Models\Producto;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,7 +20,11 @@ class ReseñaFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'buyer_id' => User::factory(),
+            'seller_id' => User::factory(),
+            'product_id' => Product::factory(),
+            'rating' => fake()->numberBetween(1, 5),
+            'comment' => fake()->sentence(),
         ];
     }
 }
