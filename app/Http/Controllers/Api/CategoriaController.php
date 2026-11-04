@@ -7,38 +7,59 @@ use App\Models\Categoria;
 use App\Http\Requests\StoreCategoriaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
 use App\Http\Resources\CategoriaResource;
-use App\Http\Resources\CategoriaCollection;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
 
 class CategoriaController extends Controller
 {
-    public function index(): CategoriaCollection
+    public function index()
     {
-        return new CategoriaCollection(Categoria::all());
+        $categorias = Categoria::all();
+        return CategoriaResource::collection($categorias);
     }
 
-    public function store(StoreCategoriaRequest $request): CategoriaResource
+    public function store(StoreCategoriaRequest $request)
     {
-        $categoria = Categoria::create($request->validated());
-        return new CategoriaResource($categoria);
-    }
+        $data = $request->validated();
+        $data['slug'] = Str::slug($data['name']);
 
-    public function show(Categoria $categoria): CategoriaResource
-    {
-        return new CategoriaResource($categoria);
-    }
+        $categoria = Categoria::create($data);
 
-    public function update(UpdateCategoriaRequest $request, Categoria $categoria): CategoriaResource
-    {
-        $categoria->update($request->validated());
-        return new CategoriaResource($categoria);
-    }
-
-    public function destroy(Categoria $categoria): JsonResponse
-    {
-        $categoria->delete();
         return response()->json([
-            'message' => 'Categoría eliminada correctamente'
+            'mensaje' => 'Categoría creada con éxito',
+            'datos' => new CategoriaResource($categoria)
+        ], 201);
+    }
+
+    public function show($id)
+    {
+        $categoria = Categoria::findOrFail($id);
+        return new CategoriaResource($categoria);
+    }
+
+    public function update(UpdateCategoriaRequest $request, $id)
+    {
+        $categoria = Categoria::findOrFail($id);
+        $data = $request->validated();
+
+        if (isset($data['name'])) {
+            $data['slug'] = Str::slug($data['name']);
+        }
+
+        $categoria->update($data);
+
+        return response()->json([
+            'mensaje' => 'Categoría actualizada con éxito',
+            'datos' => new CategoriaResource($categoria)
+        ], 200);
+    }
+
+    public function destroy($id)
+    {
+        $categoria = Categoria::findOrFail($id);
+        $categoria->delete();
+
+        return response()->json([
+            'mensaje' => 'Categoría eliminada con éxito'
         ], 200);
     }
 }
