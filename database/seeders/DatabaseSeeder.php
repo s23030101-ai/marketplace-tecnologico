@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
 
        
 foreach ($categoriesData as $catName) {
-    $categories->push(Categoria::create([ // 👈 Cambiar Category por Categoria
+    $categories->push(Categoria::create([ // 
         'name' => $catName,
         'slug' => \Illuminate\Support\Str::slug($catName),
         'description' => 'Artículos de la categoría ' . $catName,
@@ -64,9 +64,9 @@ foreach ($categoriesData as $catName) {
 
         // 5. Crear Productos asociados aleatoriamente
 foreach (range(1, 25) as $i) {
-    Producto::factory()->create([ // 👈 Cambiado a Producto
+    Producto::factory()->create([ // 
         'user_id' => $sellers->random()->id,
-        'category_id' => $categories->random()->id, // 👈 Verifica si en tu migración es categoria_id o category_id
+        'category_id' => $categories->random()->id, // 
     ]);
 }
 
