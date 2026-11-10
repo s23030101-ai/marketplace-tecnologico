@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -16,17 +14,30 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            
+        Schema::table('users', function (Blueprint $table) {
+    $table->string('control_number')->unique()->after('email');
+    $table->boolean('is_verified_student')->default(false)->after('control_number');
+    $table->string('verification_qr_code')->nullable()->after('is_verified_student');
+    $table->string('profile_photo')->nullable()->after('verification_qr_code');
+});
+
+            // Campos personalizados que estabas intentando añadir
+            $table->string('control_number')->unique()->nullable();
+            
             $table->string('password');
 
             $table->enum('role', ['admin','buyer','seller'])->default('buyer');
 
+            // Datos de estudiante y verificación
             $table->string('student_credential_path')->nullable(); // Foto o PDF de la credencial
             $table->boolean('is_verified_student')->default(false);
+            $table->string('verification_qr_code')->nullable();
+            $table->string('profile_photo')->nullable();
             $table->timestamp('verified_at')->nullable();
             $table->foreignId('verified_by')->nullable()->constrained('users')->nullOnDelete();
 
-
-            $table->boolean('is_active')->default(true); // Para dar de baj
+            $table->boolean('is_active')->default(true); // Para dar de baja
             $table->rememberToken();
             $table->timestamps();
         });
@@ -47,9 +58,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

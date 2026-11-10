@@ -1,12 +1,24 @@
-<?php
+app/Models/Producto.php
 
-namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+protected $fillable = [
+    'user_id',
+    'category_id',
+    'name',
+    'description',
+    'price',
+    'stock',
+    'is_active',
+];
 
-class Producto extends Model
+app/Models/Producto.php:
+
+public function usuario()
 {
-    /** @use HasFactory<\Database\Factories\ProductoFactory> */
-    use HasFactory;
+    return $this->belongsTo(User::class, 'user_id');
+}
+
+public function categoria()
+{
+    return $this->belongsTo(Categoria::class, 'category_id');
 }
